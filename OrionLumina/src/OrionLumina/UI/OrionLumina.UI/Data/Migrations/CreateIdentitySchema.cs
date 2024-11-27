@@ -1,9 +1,8 @@
-﻿using System;
+﻿#nullable disable
+
 using Microsoft.EntityFrameworkCore.Migrations;
 
-#nullable disable
-
-namespace OrionLumina.UI.Migrations
+namespace OrionLumina.UI.Data.Migrations
 {
     /// <inheritdoc />
     public partial class CreateIdentitySchema : Migration

@@ -1,6 +1,7 @@
-﻿using Xunit;
+﻿using Orion.Lumina.Domain;
+using Xunit;
 
-namespace Orion.Lumina.Domain.Tests
+namespace DomainTests
 {
     public class FileRecordTests
     {

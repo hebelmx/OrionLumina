@@ -21,4 +21,8 @@
 	<PackageReference Include="Microsoft.ML.Tokenizers" Version="1.0.0" />
 	<PackageReference Include="System.Numerics.Tensors" Version="9.0.0" />
   </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Domain\Orion.Lumina.Domain\Orion.Lumina.Domain.csproj" />
+  </ItemGroup>
 </Project>

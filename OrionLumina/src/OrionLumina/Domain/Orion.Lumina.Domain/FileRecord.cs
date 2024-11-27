@@ -3,7 +3,6 @@ using System.Text;
 
 namespace Orion.Lumina.Domain;
 
-
 public class FileRecord
 {
     public Guid Id { get; set; }

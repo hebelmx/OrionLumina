@@ -5,13 +5,13 @@ VisualStudioVersion = 17.12.35506.116
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "OrionLumina", "OrionLumina", "{AE3500C8-E108-4A8C-9B70-B3800C141363}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UI", "UI", "{9204EBBF-6A81-4684-BA3A-5A045FA06948}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "04 UI", "04 UI", "{9204EBBF-6A81-4684-BA3A-5A045FA06948}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Application", "Application", "{DBF4CD8F-FCF6-43FE-A408-6A7E1CBE02E2}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "02 Application", "02 Application", "{DBF4CD8F-FCF6-43FE-A408-6A7E1CBE02E2}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Domain", "Domain", "{65ABE445-8667-45D4-AEEB-2D5383D1F0F4}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "01 Domain", "01 Domain", "{65ABE445-8667-45D4-AEEB-2D5383D1F0F4}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "InfraStructure", "InfraStructure", "{3DCB85C7-EB93-45EF-B4AA-8BAFEFBEEC92}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "03 Infrastructure", "03 Infrastructure", "{3DCB85C7-EB93-45EF-B4AA-8BAFEFBEEC92}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrionLumina.Application.CloudToEmbeddings", "OrionLumina\Aplication\OrionLumina.Aplication.CloudToEmbeddings\OrionLumina.Application.CloudToEmbeddings.csproj", "{02162F5B-C961-4244-B214-318490DC1A45}"
 EndProject
@@ -19,11 +19,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrionLumina.UI", "OrionLumi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrionLumina.UI.Client", "OrionLumina\UI\OrionLumina.UI.Client\OrionLumina.UI.Client.csproj", "{13F30729-9FE8-4283-BF5E-86C28E9C02E6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTestProject1", "OrionLumina\Testing\Domain.Test\UnitTestProject1\UnitTestProject1.csproj", "{08FD98A5-0AB3-4C07-8C15-32F46D435C1F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DomainTests", "OrionLumina\Testing\Domain.Test\UnitTestProject1\DomainTests.csproj", "{08FD98A5-0AB3-4C07-8C15-32F46D435C1F}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Testing", "Testing", "{BE68C4B6-7719-4F8B-820A-83B63745E0C4}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "05 Testing", "05 Testing", "{BE68C4B6-7719-4F8B-820A-83B63745E0C4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orion.Lumina.Domain", "OrionLumina.Domain\Orion.Lumina.Domain\Orion.Lumina.Domain.csproj", "{B8849781-31E7-453A-B707-BB6291798B97}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orion.Lumina.Domain", "OrionLumina\Domain\Orion.Lumina.Domain\Orion.Lumina.Domain.csproj", "{01EBCD85-C3E6-48D8-9B6A-1633AA25D250}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orion.Lumina.infrastructure", "OrionLumina\infrastructure\Orion.Lumina.infrastructure\Orion.Lumina.infrastructure.csproj", "{115CDE9E-F9DA-48B8-A3A4-60B4F0BE9408}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -47,10 +49,14 @@ Global
 		{08FD98A5-0AB3-4C07-8C15-32F46D435C1F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{08FD98A5-0AB3-4C07-8C15-32F46D435C1F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{08FD98A5-0AB3-4C07-8C15-32F46D435C1F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B8849781-31E7-453A-B707-BB6291798B97}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B8849781-31E7-453A-B707-BB6291798B97}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B8849781-31E7-453A-B707-BB6291798B97}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B8849781-31E7-453A-B707-BB6291798B97}.Release|Any CPU.Build.0 = Release|Any CPU
+		{01EBCD85-C3E6-48D8-9B6A-1633AA25D250}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{01EBCD85-C3E6-48D8-9B6A-1633AA25D250}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{01EBCD85-C3E6-48D8-9B6A-1633AA25D250}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{01EBCD85-C3E6-48D8-9B6A-1633AA25D250}.Release|Any CPU.Build.0 = Release|Any CPU
+		{115CDE9E-F9DA-48B8-A3A4-60B4F0BE9408}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{115CDE9E-F9DA-48B8-A3A4-60B4F0BE9408}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{115CDE9E-F9DA-48B8-A3A4-60B4F0BE9408}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{115CDE9E-F9DA-48B8-A3A4-60B4F0BE9408}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -65,6 +71,7 @@ Global
 		{13F30729-9FE8-4283-BF5E-86C28E9C02E6} = {9204EBBF-6A81-4684-BA3A-5A045FA06948}
 		{08FD98A5-0AB3-4C07-8C15-32F46D435C1F} = {BE68C4B6-7719-4F8B-820A-83B63745E0C4}
 		{BE68C4B6-7719-4F8B-820A-83B63745E0C4} = {AE3500C8-E108-4A8C-9B70-B3800C141363}
-		{B8849781-31E7-453A-B707-BB6291798B97} = {65ABE445-8667-45D4-AEEB-2D5383D1F0F4}
+		{01EBCD85-C3E6-48D8-9B6A-1633AA25D250} = {65ABE445-8667-45D4-AEEB-2D5383D1F0F4}
+		{115CDE9E-F9DA-48B8-A3A4-60B4F0BE9408} = {3DCB85C7-EB93-45EF-B4AA-8BAFEFBEEC92}
 	EndGlobalSection
 EndGlobal

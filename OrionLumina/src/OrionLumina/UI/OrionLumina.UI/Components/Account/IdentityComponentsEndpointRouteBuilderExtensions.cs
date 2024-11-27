@@ -1,5 +1,3 @@
-using System.Security.Claims;
-using System.Text.Json;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Http.Extensions;
@@ -9,8 +7,10 @@ using Microsoft.Extensions.Primitives;
 using OrionLumina.UI.Components.Account.Pages;
 using OrionLumina.UI.Components.Account.Pages.Manage;
 using OrionLumina.UI.Data;
+using System.Security.Claims;
+using System.Text.Json;
 
-namespace Microsoft.AspNetCore.Routing;
+namespace OrionLumina.UI.Components.Account;
 
 internal static class IdentityComponentsEndpointRouteBuilderExtensions
 {
