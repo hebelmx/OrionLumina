@@ -26,3 +26,28 @@ public interface IFileReader
 }
 
 
+public interface IProcessFile
+{
+
+    public FileStatus FileStatus { get; set; }
+
+    public string Document { get; set; }
+
+
+    public Action ProcessAction { get; set; }
+    public Func<IEnumerable<Prompt>, string> PromptExtractFunction { get; set; }
+
+    public Func<IEnumerable<float[]>, IEnumerable<byte[]>> EncodingFunction { get; set; }
+
+    public string Hash { get; set; }
+
+    public IEnumerable<byte[]> Data { get; set; }
+
+    public IEnumerable<float[]> Encodings { get; set; }
+
+    public IEnumerable<Prompt> PromptList { get; set; }
+
+}
+
+
+

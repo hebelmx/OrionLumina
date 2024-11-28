@@ -8,7 +8,9 @@ namespace OrionLumina.Application.CloudToEmbeddings;
 public class LlamaQueryExtractor : QueryExtractor
 
 {
-
+    private static readonly Regex Pattern =
+        new(pattern: @"\{\s*""Message"":\s*""(.*?)"",\s*""Response"":\s*""(.*?)""\s*\}",
+            options: RegexOptions.Compiled | RegexOptions.IgnoreCase);
     public async Task<List<Prompt>> ExtractQueryPrompts(string document)
     {
 
@@ -40,10 +42,13 @@ public class LlamaQueryExtractor : QueryExtractor
 
         var messages = response.Message.ToString();
 
-        string pattern = @"\{\s*""Message"":\s*""(.*?)"",\s*""Response"":\s*""(.*?)""\s*\}";
+        //string pattern = @"\{\s*""Message"":\s*""(.*?)"",\s*""Response"":\s*""(.*?)""\s*\}";
 
         // Find matches
-        var matches = Regex.Matches(messages, pattern);
+        if (!Pattern.IsMatch(messages) ) return new List<Prompt>();
+
+        //var matches = Regex.Matches(messages, pattern);
+        var matches = Pattern.Matches(messages);
 
         // Convert matches to a list of Prompt objects
         var prompts = new List<Prompt>();
