@@ -27,6 +27,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orion.Lumina.Domain", "Orio
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orion.Lumina.infrastructure", "OrionLumina\infrastructure\Orion.Lumina.infrastructure\Orion.Lumina.infrastructure.csproj", "{115CDE9E-F9DA-48B8-A3A4-60B4F0BE9408}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "06 Training", "06 Training", "{7A2148D5-959C-4DE5-8724-63F0BF32B212}"
+	ProjectSection(SolutionItems) = preProject
+		OrionLumina\Python\training.py = OrionLumina\Python\training.py
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -73,5 +78,6 @@ Global
 		{BE68C4B6-7719-4F8B-820A-83B63745E0C4} = {AE3500C8-E108-4A8C-9B70-B3800C141363}
 		{01EBCD85-C3E6-48D8-9B6A-1633AA25D250} = {65ABE445-8667-45D4-AEEB-2D5383D1F0F4}
 		{115CDE9E-F9DA-48B8-A3A4-60B4F0BE9408} = {3DCB85C7-EB93-45EF-B4AA-8BAFEFBEEC92}
+		{7A2148D5-959C-4DE5-8724-63F0BF32B212} = {AE3500C8-E108-4A8C-9B70-B3800C141363}
 	EndGlobalSection
 EndGlobal

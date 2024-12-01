@@ -151,3 +151,7 @@ instance/
 *.mo
 *.pot
 *.po
+
+
+# ignore python env
+**/myenv/
