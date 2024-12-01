@@ -155,3 +155,18 @@ instance/
 
 # ignore python env
 **/myenv/
+# Ignore Python virtual environments
+
+venv/
+env/
+**/env/
+.env/
+
+# Ignore environment variable files
+*.env
+*.env.*
+
+# Other common ignores
+__pycache__/
+*.py[cod]
+*.pyo
