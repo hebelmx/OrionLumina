@@ -170,3 +170,43 @@ env/
 __pycache__/
 *.py[cod]
 *.pyo
+
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*.pyo
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Test and coverage files
+*.cover
+*.py,cover
+.coverage
+.cache
+nosetests.xml
+coverage.xml
+*.log
+
+# IDE files
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project

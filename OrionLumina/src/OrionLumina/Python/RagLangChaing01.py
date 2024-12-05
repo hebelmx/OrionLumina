@@ -1,27 +1,39 @@
-from langchain_community.document_loaders import WebBaseLoader
-from langchain.text_splitter import RecursiveCharacterTextSplitter
-# List of URLs to load documents from
-urls = [
-    "<https://lilianweng.github.io/posts/2023-06-23-agent/>",
-    "<https://lilianweng.github.io/posts/2023-03-15-prompt-engineering/>",
-    "<https://lilianweng.github.io/posts/2023-10-25-adv-attack-llm/>",
-]
-# Load documents from the URLs
-docs = [WebBaseLoader(url).load() for url in urls]
-docs_list = [item for sublist in docs for item in sublist]
+from transformers import AutoModelForCausalLM, AutoTokenizer
+model_name = "google-bert/bert-base-cased"
+model = AutoModelForCausalLM.from_pretrained(model_name)
+tokenizer = AutoTokenizer.from_pretrained(model_name)
 
-# Initialize a text splitter with specified chunk size and overlap
-text_splitter = RecursiveCharacterTextSplitter.from_tiktoken_encoder(
-    chunk_size=250, chunk_overlap=0
-)
-# Split the documents into chunks
-doc_splits = text_splitter.split_documents(docs_list)
 
-from langchain_community.vectorstores import SKLearnVectorStore
-from langchain_openai import OpenAIEmbeddings
-# Create embeddings for documents and store them in a vector store
-vectorstore = SKLearnVectorStore.from_documents(
-    documents=doc_splits,
-    embedding=OpenAIEmbeddings(openai_api_key="api_key"),
+from datasets import load_dataset
+
+dataset = load_dataset(
+  "DIBT/10k_prompts_ranked",
+  split="train"
+).filter(
+  lambda r: r['avg_rating']>=4 and r['num_responses']>=2
 )
-retriever = vectorstore.as_retriever(k=4)
+dataset = dataset.to_list()
+load_dataset = LoadDataFromDicts(
+  name="load_dataset",
+  data=dataset[0:500], # during development I used [0:1] to iterate quickly
+  output_mappings={"prompt": "instruction"}
+)
+tokenized_dataset = dataset.map(lambda x: tokenizer(x['text']), batched=True)
+
+from transformers import Trainer, TrainingArguments
+
+
+training_args = TrainingArguments(
+    output_dir="./results",
+    evaluation_strategy="steps",
+    per_device_train_batch_size=2,
+    num_train_epochs=3,
+    logging_dir='./logs',
+)
+trainer = Trainer(
+    model=model,
+    args=training_args,
+    train_dataset=tokenized_dataset["train"],
+    eval_dataset=tokenized_dataset["test"],
+)
+trainer.train()

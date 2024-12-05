@@ -1,0 +1,31 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Worker">
+
+  <PropertyGroup>
+	<TargetFramework>net9.0</TargetFramework>
+	<Nullable>enable</Nullable>
+	<ImplicitUsings>enable</ImplicitUsings>
+	<UserSecretsId>dotnet-OrionLumina.Application.CloudToEmbeddings-0c780958-1318-4fa1-9042-c97eeafeabb7</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+	<PackageReference Include="Google.Apis" Version="1.68.0" />
+	<PackageReference Include="Google.Apis.Auth" Version="1.68.0" />
+	<PackageReference Include="Google.Apis.Drive.v3" Version="1.68.0.3601" />
+	<PackageReference Include="Microsoft.Extensions.AI" Version="9.0.1-preview.1.24570.5" />
+	<PackageReference Include="Microsoft.Extensions.AI.Abstractions" Version="9.0.1-preview.1.24570.5" />
+	<PackageReference Include="Microsoft.Extensions.AI.Ollama" Version="9.0.1-preview.1.24570.5" />
+	<PackageReference Include="Microsoft.Extensions.AI.OpenAI" Version="9.0.1-preview.1.24570.5" />
+	<PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.0" />
+	<PackageReference Include="Microsoft.Extensions.VectorData.Abstractions" Version="9.0.0-preview.1.24523.1" />
+	<PackageReference Include="Microsoft.ML" Version="4.0.0" />
+	<PackageReference Include="Microsoft.ML.Tokenizers" Version="1.0.0" />
+	<PackageReference Include="Microsoft.ML.TorchSharp" Version="0.22.0" />
+	<PackageReference Include="System.Numerics.Tensors" Version="9.0.0" />
+	<PackageReference Include="TorchSharp" Version="0.103.1" />
+	<PackageReference Include="TorchSharp-cuda-windows" Version="0.103.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Domain\Orion.Lumina.Domain\Orion.Lumina.Domain.csproj" />
+  </ItemGroup>
+</Project>
