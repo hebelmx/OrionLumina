@@ -4,6 +4,7 @@ using File = System.IO.File;
 
 namespace Orion.Lumina.Application
 {
+
     [FileReader(".doc")]
     public class DocFileReader : IFileReader
     {

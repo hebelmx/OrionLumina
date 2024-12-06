@@ -24,6 +24,7 @@
     <PackageReference Include="IFilterTextReader" Version="1.7.11" />
     <PackageReference Include="NPOI" Version="2.7.2" />
     <PackageReference Include="HtmlAgilityPack" Version="1.11.71" />
+    <PackageReference Include="ODSSharp" Version="1.0.5" />
     <PackageReference Include="PdfPig" Version="0.1.10-alpha-20241121-7db34" />
     <PackageReference Include="SpreadsheetLight" Version="3.5.0" />
     <PackageReference Include="Tabula" Version="0.1.4" />

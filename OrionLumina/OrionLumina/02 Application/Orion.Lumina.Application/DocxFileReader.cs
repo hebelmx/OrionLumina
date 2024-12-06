@@ -1,4 +1,5 @@
-﻿using DocumentFormat.OpenXml.Packaging;
+﻿using AODL.Document.TextDocuments;
+using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
 using Orion.Lumina.Domain;
 
@@ -16,8 +17,32 @@ public class DocxFileReader : IFileReader
         ValidateFilePath(filePath);
 
         using var doc = WordprocessingDocument.Open(filePath, false);
-        var result = doc.MainDocumentPart?.Document?.Body?.FirstChild?.InnerText;
+       
+
+        var result = ExtractTextContent(doc);
+
         return result ?? string.Empty;
+    }
+
+    private string ExtractTextContent(WordprocessingDocument textDocument)
+    {
+        if (textDocument == null)
+        {
+            throw new ArgumentNullException(nameof(textDocument), "The provided document cannot be null.");
+        }
+
+        var body = textDocument.MainDocumentPart?.Document?.Body;
+        if (body == null)
+        {
+            throw new InvalidOperationException("The document does not contain a valid body element.");
+        }
+
+        var allText = body.Descendants<DocumentFormat.OpenXml.Wordprocessing.Text>()
+            .Select(textElement => textElement.Text)
+            .Where(text => !string.IsNullOrWhiteSpace(text))
+            .Aggregate(string.Empty, (current, text) => current + text);
+
+        return allText;
     }
 
     /// <summary>
