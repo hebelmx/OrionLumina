@@ -4,7 +4,6 @@ using Orion.Lumina.Domain;
 
 namespace Orion.Lumina.Application;
 [FileReader(".docx")]
-
 public class DocxFileReader : IFileReader
 {
     /// <summary>

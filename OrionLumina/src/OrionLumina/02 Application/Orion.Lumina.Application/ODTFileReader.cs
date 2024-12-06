@@ -5,7 +5,7 @@ using Orion.Lumina.Domain;
 namespace Orion.Lumina.Application
 {
     [FileReader(".odt")]
-    [FileReader(".doc")]
+
     public class ODTFileReader : IFileReader
     {
         /// <summary>
