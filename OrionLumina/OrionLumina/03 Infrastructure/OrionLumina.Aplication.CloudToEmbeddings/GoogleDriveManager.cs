@@ -2,6 +2,7 @@
 using Google.Apis.Drive.v3;
 using Google.Apis.Services;
 using Google.Apis.Util.Store;
+using System.Diagnostics.CodeAnalysis;
 using static Google.Apis.Auth.OAuth2.GoogleClientSecrets;
 
 namespace OrionLumina.Infrastructure.CloudToEmbeddings;
@@ -12,26 +13,8 @@ public class GoogleDriveManager(ILogger<Worker> GoogleDriveDownloadFile, Credent
 
     public async Task ListAsync()
     {
-        string[] scopes = { DriveService.Scope.Drive };
-        string applicationName = "OrionLumina";
-
-        // Authentication with Google
-        UserCredential credential;
-
-        using var stream = new MemoryStream();
-        // Convert credentials to JSON format
-        var credentialsJson = $@"
-            {{
-                ""installed"": {{
-                    ""client_id"": ""{driveCredentials.Client_Id}"",
-                    ""project_id"": ""{driveCredentials.Project_Id}"",
-                    ""auth_uri"": ""{driveCredentials.Auth_Uri}"",
-                    ""token_uri"": ""{driveCredentials.Token_Uri}"",
-                    ""auth_provider_x509_cert_url"": ""{driveCredentials.Auth_Provider_X509_Cert_Url}"",
-                    ""client_secret"": ""{driveCredentials.Client_Secret}"",
-                    ""redirect_uris"": [""http://localhost""]
-                }}
-            }}";
+        var scopes = CredentialsJson(out var applicationName, out var stream, out var credentialsJson);
+        using var memoryStream = stream;
 
         // Write credentials to memory stream
         await using (var writer = new StreamWriter(stream, leaveOpen: true))
@@ -42,7 +25,7 @@ public class GoogleDriveManager(ILogger<Worker> GoogleDriveDownloadFile, Credent
         }
 
         // Authenticate the user
-        credential = await GoogleWebAuthorizationBroker.AuthorizeAsync(
+        var credential = await GoogleWebAuthorizationBroker.AuthorizeAsync(
             (await FromStreamAsync(stream)).Secrets,
             scopes,
             "user",
@@ -76,6 +59,42 @@ public class GoogleDriveManager(ILogger<Worker> GoogleDriveDownloadFile, Credent
             Console.WriteLine("No folders found.");
         }
     }
+
+    private string[] CredentialsJson(out string applicationName, [NotNull] out MemoryStream? stream,
+        out string credentialsJson)
+    {
+        stream = null;
+        try
+        {
+            string[] scopes = { DriveService.Scope.Drive };
+            applicationName = "OrionLumina";
+
+            // Authentication with Google
+            UserCredential credential;
+
+            stream = new MemoryStream();
+            // Convert credentials to JSON format
+            credentialsJson = $@"
+            {{
+                ""installed"": {{
+                    ""client_id"": ""{driveCredentials.Client_Id}"",
+                    ""project_id"": ""{driveCredentials.Project_Id}"",
+                    ""auth_uri"": ""{driveCredentials.Auth_Uri}"",
+                    ""token_uri"": ""{driveCredentials.Token_Uri}"",
+                    ""auth_provider_x509_cert_url"": ""{driveCredentials.Auth_Provider_X509_Cert_Url}"",
+                    ""client_secret"": ""{driveCredentials.Client_Secret}"",
+                    ""redirect_uris"": [""http://localhost""]
+                }}
+            }}";
+            return scopes;
+        }
+        catch
+        {
+            stream?.Dispose();
+            throw;
+        }
+    }
+
     static async Task DownloadAsync()
     {
         string[] Scopes = { DriveService.Scope.DriveFile };
