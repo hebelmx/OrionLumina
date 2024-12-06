@@ -9,7 +9,9 @@ public class FileReaderFactoryTests
     private readonly FileReaderFactory _factory = new();
 
     [Theory]
+    [InlineData("test.pptx", "ExpectedText")]
     [InlineData("test.odt", "ExpectedText")]
+    [InlineData("test.ods", "ExpectedText")]
     [InlineData("test.pdf", "ExpectedText")]
     [InlineData("test.xls", "ExpectedText")]
     [InlineData("test.xlsx", "ExpectedText")]
@@ -25,7 +27,7 @@ public class FileReaderFactoryTests
         // Assert
 
         result.Should().Contain(expectedMessage);
-        
+
     }
 
     [Fact]

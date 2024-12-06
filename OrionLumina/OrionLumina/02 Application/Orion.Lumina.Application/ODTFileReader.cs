@@ -45,14 +45,11 @@ namespace Orion.Lumina.Application
             foreach (var content in textDocument.Content)
             {
                 if (content is not AODL.Document.Content.Text.Paragraph cont) continue;
-                foreach (var t in cont.TextContent)
+                foreach (var textContent in cont.TextContent)
                 {
-                    if (t is FormatedText)
-                    {
-                        FormatedText it = (FormatedText)t;
-                        Console.WriteLine(it.Text);
-                        contentBuilder.Append(it.Text);
-                    }
+                    if (textContent is not FormatedText formatedText) continue;
+                    Console.WriteLine(formatedText.Text);
+                    contentBuilder.Append(formatedText.Text);
 
                 }
             }
