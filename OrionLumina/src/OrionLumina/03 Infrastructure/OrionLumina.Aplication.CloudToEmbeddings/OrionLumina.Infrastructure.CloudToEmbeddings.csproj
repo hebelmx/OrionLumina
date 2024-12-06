@@ -10,7 +10,7 @@
   <ItemGroup>
 	<PackageReference Include="Google.Apis" Version="1.68.0" />
 	<PackageReference Include="Google.Apis.Auth" Version="1.68.0" />
-	<PackageReference Include="Google.Apis.Drive.v3" Version="1.68.0.3601" />
+	<PackageReference Include="Google.Apis.Drive.v3" Version="1.68.0.3608" />
 	<PackageReference Include="Microsoft.Extensions.AI" Version="9.0.1-preview.1.24570.5" />
 	<PackageReference Include="Microsoft.Extensions.AI.Abstractions" Version="9.0.1-preview.1.24570.5" />
 	<PackageReference Include="Microsoft.Extensions.AI.Ollama" Version="9.0.1-preview.1.24570.5" />
