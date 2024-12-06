@@ -6,7 +6,7 @@ namespace Orion.Lumina.Application
 {
     [FileReader(".odt")]
 
-    public class ODTFileReader : IFileReader
+    public class OdtFileReader : IFileReader
     {
         /// <summary>
         /// Reads the content of the `.odt` file.

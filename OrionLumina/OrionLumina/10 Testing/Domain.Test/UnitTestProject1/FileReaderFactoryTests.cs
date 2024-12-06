@@ -11,6 +11,10 @@ public class FileReaderFactoryTests
     [Theory]
     [InlineData("test.pptx", "ExpectedText")]
     [InlineData("test.odt", "ExpectedText")]
+    [InlineData("test.ODT", "ExpectedText")]
+    [InlineData("test.xy2", "ExpectedText")]
+    [InlineData("test.xyz", "ExpectedText")]
+    [InlineData("test.odp", "ExpectedText")]
     [InlineData("test.ods", "ExpectedText")]
     [InlineData("test.pdf", "ExpectedText")]
     [InlineData("test.xls", "ExpectedText")]
@@ -25,7 +29,6 @@ public class FileReaderFactoryTests
         var result = reader.Read(fileName);
 
         // Assert
-
         result.Should().Contain(expectedMessage);
 
     }

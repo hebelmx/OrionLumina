@@ -32,7 +32,7 @@ namespace Orion.Lumina.Application
             }
             catch (Exception ex)
             {
-                throw new InvalidOperationException("Failed to read the .doc file.", ex);
+                throw new InvalidOperationException("Failed to read the file.", ex);
             }
         }
 

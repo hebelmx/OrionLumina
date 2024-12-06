@@ -14,6 +14,9 @@
   <ItemGroup>
     <PackageReference Include="AODLCore" Version="1.3.0" />
     <PackageReference Include="ClosedXML" Version="0.104.2" />
+    <PackageReference Include="GemBox.Document" Version="35.0.1946" />
+    <PackageReference Include="GemBox.Presentation" Version="27.0.1148" />
+    <PackageReference Include="GemBox.Spreadsheet" Version="49.0.1895" />
     <PackageReference Include="Google.Apis.Auth" Version="1.68.0" />
     <PackageReference Include="Google.Apis.Docs.v1" Version="1.68.0.3498" />
     <PackageReference Include="Google.Apis.Sheets.v4" Version="1.68.0.3568" />

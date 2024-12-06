@@ -1,12 +1,17 @@
-﻿using AODL.Document.Content.Tables;
-using AODL.Document.SpreadsheetDocuments;
+﻿using GemBox.Spreadsheet;
 using Orion.Lumina.Domain;
 
 namespace Orion.Lumina.Application
 {
     [FileReader(".ods")]
-    public class ODSFileReader : IFileReader
+    public class OdsFileReader : IFileReader
     {
+        static OdsFileReader()
+        {
+            // Set the license key or use a free trial mode.
+            SpreadsheetInfo.SetLicense("FREE-LIMITED-KEY");
+        }
+
         /// <summary>
         /// Reads the content of the `.ods` file.
         /// </summary>
@@ -18,10 +23,8 @@ namespace Orion.Lumina.Application
 
             try
             {
-                using var spreadsheetDocument = new SpreadsheetDocument();
-                spreadsheetDocument.Load(filePath);
-
-                return ExtractTextContent(spreadsheetDocument);
+                var workbook = ExcelFile.Load(filePath);
+                return ExtractTextContent(workbook);
             }
             catch (Exception ex)
             {
@@ -40,38 +43,29 @@ namespace Orion.Lumina.Application
         }
 
         /// <summary>
-        /// Extracts text content from the spreadsheet document.
+        /// Extracts text content from the workbook.
         /// </summary>
-        /// <param name="spreadsheetDocument">The loaded AODL spreadsheet document.</param>
+        /// <param name="workbook">The loaded GemBox.Spreadsheet workbook.</param>
         /// <returns>The concatenated text content of all sheets.</returns>
-        private string ExtractTextContent(SpreadsheetDocument spreadsheetDocument)
+        private string ExtractTextContent(ExcelFile workbook)
         {
-            if (spreadsheetDocument == null || spreadsheetDocument.TableCollection == null)
-                return string.Empty;
-
             var contentBuilder = new System.Text.StringBuilder();
 
-            foreach (var table in spreadsheetDocument.TableCollection)
+            foreach (var worksheet in workbook.Worksheets)
             {
-
-                Table t = table as Table;
-
-                foreach (var row in t.RowCollection)
+                foreach (var row in worksheet.Rows)
                 {
-
-                    Row r = row as Row;
-
-                    foreach (var cell in r.CellCollection)
+                    foreach (var cell in row.AllocatedCells)
                     {
-                        Cell c = cell as Cell;
-                        contentBuilder.Append(c.Document.XmlDoc.InnerText + " ");
+                        if (cell.ValueType != CellValueType.Null)
+                        {
+                            contentBuilder.Append(cell.Value.ToString() + " ");
+                        }
                     }
                 }
             }
 
-
-
-            return contentBuilder.ToString();
+            return contentBuilder.ToString().Trim();
         }
 
         /// <summary>
