@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using Models;
 using TorchSharp;
 using TorchSharp.Examples;
 using static TorchSharp.torch;

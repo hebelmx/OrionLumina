@@ -1,15 +1,9 @@
 // Copyright (c) .NET Foundation and Contributors.  All Rights Reserved.  See LICENSE in the project root for license information.
-using System;
-using System.IO;
-using System.Linq;
-using System.Collections.Generic;
-using System.Diagnostics;
 
 using static TorchSharp.torch;
 using static TorchSharp.torch.nn;
-using static TorchSharp.torch.nn.functional;
 
-namespace TorchSharp.Examples
+namespace Models
 {
     /// <summary>
     /// This example is based on the PyTorch tutorial at:
@@ -19,8 +13,8 @@ namespace TorchSharp.Examples
     /// </summary>
     public class TextClassificationModel : Module<Tensor, Tensor, Tensor>
     {
-        private Modules.EmbeddingBag embedding;
-        private Modules.Linear fc;
+        private TorchSharp.Modules.EmbeddingBag embedding;
+        private TorchSharp.Modules.Linear fc;
 
         public TextClassificationModel(long vocab_size, long embed_dim, long num_class) : base("TextClassification")
         {

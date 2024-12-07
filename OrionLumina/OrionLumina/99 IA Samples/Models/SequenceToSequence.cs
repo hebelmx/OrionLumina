@@ -1,15 +1,11 @@
 // Copyright (c) .NET Foundation and Contributors.  All Rights Reserved.  See LICENSE in the project root for license information.
-using System;
-using System.IO;
-using System.Linq;
-using System.Collections.Generic;
-using System.Diagnostics;
 
+using System;
+using TorchSharp;
 using static TorchSharp.torch;
 using static TorchSharp.torch.nn;
-using static TorchSharp.torch.nn.functional;
 
-namespace TorchSharp.Examples
+namespace Models
 {
     /// <summary>
     /// This example is based on the PyTorch tutorial at:
@@ -20,10 +16,10 @@ namespace TorchSharp.Examples
 
     public class TransformerModel : Module<Tensor, Tensor, Tensor>
     {
-        private Modules.TransformerEncoder transformer_encoder;
+        private TorchSharp.Modules.TransformerEncoder transformer_encoder;
         private PositionalEncoding pos_encoder;
-        private Modules.Embedding encoder;
-        private Modules.Linear decoder;
+        private TorchSharp.Modules.Embedding encoder;
+        private TorchSharp.Modules.Linear decoder;
 
         private long ninputs;
         private Device device;

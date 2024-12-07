@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using Models;
 using TorchSharp;
 using TorchSharp.Examples;
 using TorchSharp.Examples.Utils;
@@ -91,7 +92,7 @@ namespace CSharpExamples
                 Decompress.DecompressGZipFile(Path.Combine(sourceDir, "t10k-labels-idx1-ubyte.gz"), targetDir);
             }
 
-            TorchSharp.Examples.MNIST.Model model = null;
+            Model model = null;
 
             var normImage = transforms.Normalize(new double[] { 0.1307 }, new double[] { 0.3081 }, device: (Device)device);
 
@@ -103,7 +104,7 @@ namespace CSharpExamples
                 // We need the model to be trained first, because we want to start with a trained model.
                 Console.WriteLine($"\n  Running MNIST on {device.type.ToString()} in order to pre-train the model.");
 
-                model = new TorchSharp.Examples.MNIST.Model("model", device);
+                model = new Model("model", device);
 
                 using (var train = new MNISTReader(targetDir, "train", _trainBatchSize, device: device, shuffle: true, transform: normImage))
                 {
@@ -115,7 +116,7 @@ namespace CSharpExamples
             }
             else
             {
-                model = new TorchSharp.Examples.MNIST.Model("model", torch.CPU);
+                model = new Model("model", torch.CPU);
                 model.load(modelFile);
             }
 
@@ -139,7 +140,7 @@ namespace CSharpExamples
         }
 
         private static double Test(
-            TorchSharp.Examples.MNIST.Model model,
+            Model model,
             Loss<Tensor, Tensor, Tensor> criterion,
             double ε,
             IEnumerable<(Tensor, Tensor)> dataLoader,

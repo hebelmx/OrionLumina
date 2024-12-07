@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using Models;
 using TorchSharp;
 using TorchSharp.Examples;
 using TorchSharp.Examples.Utils;

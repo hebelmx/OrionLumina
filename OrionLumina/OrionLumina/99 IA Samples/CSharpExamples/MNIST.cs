@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using Models;
 using TorchSharp;
 using TorchSharp.Examples;
 using TorchSharp.Examples.Utils;
@@ -84,7 +85,7 @@ namespace CSharpExamples
 
             Console.WriteLine($"\tCreating the model...");
 
-            var model = new TorchSharp.Examples.MNIST.Model("model", device);
+            var model = new Model("model", device);
 
             var normImage = transforms.Normalize(new double[] { 0.1307 }, new double[] { 0.3081 }, device: (Device)device);
 

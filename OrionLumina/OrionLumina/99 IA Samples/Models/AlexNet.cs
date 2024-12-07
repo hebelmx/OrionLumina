@@ -1,16 +1,10 @@
 // Copyright (c) .NET Foundation and Contributors.  All Rights Reserved.  See LICENSE in the project root for license information.
-using System;
-using System.IO;
-using System.Linq;
-using System.Collections.Generic;
-using System.Diagnostics;
 
 using TorchSharp;
 using static TorchSharp.torch;
 using static TorchSharp.torch.nn;
-using static TorchSharp.torch.nn.functional;
 
-namespace TorchSharp.Examples
+namespace Models
 {
     /// <summary>
     /// Modified version of original AlexNet to fix CIFAR10 32x32 images.

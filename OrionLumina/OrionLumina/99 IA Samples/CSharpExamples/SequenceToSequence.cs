@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using Models;
 using TorchSharp;
 using TorchSharp.Examples;
 using static TorchSharp.torch;
@@ -26,7 +27,7 @@ namespace CSharpExamples
     public class SequenceToSequence
     {
         // This path assumes that you're running this on Windows.
-        private readonly static string _dataLocation = Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory), "..", "Downloads", "wikitext-2-v1");
+        private static readonly string _dataLocation = Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory), "..", "Downloads", "wikitext-2-v1");
 
         private const long emsize = 200;
         private const long nhid = 200;
