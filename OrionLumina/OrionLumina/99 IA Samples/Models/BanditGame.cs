@@ -30,7 +30,7 @@ namespace Models
             if (armIndex < 0 || armIndex >= _arms.Count)
                 throw new ArgumentOutOfRangeException(nameof(armIndex), "Invalid arm index.");
 
-            int reward = _arms[armIndex].Pull();
+            var reward = _arms[armIndex].Pull();
             PullCounts[armIndex]++;
             Rewards[armIndex] += reward;
 

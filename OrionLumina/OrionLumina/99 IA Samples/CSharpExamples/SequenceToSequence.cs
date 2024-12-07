@@ -80,7 +80,7 @@ namespace CSharpExamples
             Console.WriteLine($"\tCreating the model...");
             Console.WriteLine();
 
-            var model = new TransformerModel(ntokens, emsize, nhead, nhid, nlayers, dropout).to((Device)device);
+            var model = new TransformerModel(ntokens, emsize, nhead, nhid, nlayers, dropout).To((Device)device);
             var loss = CrossEntropyLoss();
             var lr = 2.50;
             var optimizer = torch.optim.SGD(model.parameters(), lr);

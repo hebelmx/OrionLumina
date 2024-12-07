@@ -11,30 +11,30 @@ namespace Models
     /// </summary>
     public class AlexNet : Module<Tensor, Tensor>
     {
-        private readonly Module<Tensor, Tensor> features;
-        private readonly Module<Tensor, Tensor> avgPool;
-        private readonly Module<Tensor, Tensor> classifier;
+        private readonly Module<Tensor, Tensor> _features;
+        private readonly Module<Tensor, Tensor> _avgPool;
+        private readonly Module<Tensor, Tensor> _classifier;
 
         public AlexNet(string name, int numClasses, Device device = null) : base(name)
         {
-            features = Sequential(
+            _features = Sequential(
                 ("c1", Conv2d(3, 64, kernelSize: 3, stride: 2, padding: 1)),
                 ("r1", ReLU(inplace: true)),
-                ("mp1", MaxPool2d(kernelSize: new long[] { 2, 2 })),
+                ("mp1", MaxPool2d(kernelSize: [2, 2])),
                 ("c2", Conv2d(64, 192, kernelSize: 3, padding: 1)),
                 ("r2", ReLU(inplace: true)),
-                ("mp2", MaxPool2d(kernelSize: new long[] { 2, 2 })),
+                ("mp2", MaxPool2d(kernelSize: [2, 2])),
                 ("c3", Conv2d(192, 384, kernelSize: 3, padding: 1)),
                 ("r3", ReLU(inplace: true)),
                 ("c4", Conv2d(384, 256, kernelSize: 3, padding: 1)),
                 ("r4", ReLU(inplace: true)),
                 ("c5", Conv2d(256, 256, kernelSize: 3, padding: 1)),
                 ("r5", ReLU(inplace: true)),
-                ("mp3", MaxPool2d(kernelSize: new long[] { 2, 2 })));
+                ("mp3", MaxPool2d(kernelSize: [2, 2])));
 
-            avgPool = AdaptiveAvgPool2d(new long[] { 2, 2 });
+            _avgPool = AdaptiveAvgPool2d([2, 2]);
 
-            classifier = Sequential(
+            _classifier = Sequential(
                 ("d1", Dropout()),
                 ("l1", Linear(256 * 2 * 2, 4096)),
                 ("r1", ReLU(inplace: true)),
@@ -53,12 +53,12 @@ namespace Models
 
         public override Tensor forward(Tensor input)
         {
-            var f = features.forward(input);
-            var avg = avgPool.forward(f);
+            var f = _features.forward(input);
+            var avg = _avgPool.forward(f);
 
-            var x = avg.view(new long[] { avg.shape[0], 256 * 2 * 2 });
+            var x = avg.view([avg.shape[0], 256 * 2 * 2]);
 
-            return classifier.forward(x);
+            return _classifier.forward(x);
         }
     }
 

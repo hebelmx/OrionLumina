@@ -13,13 +13,13 @@ namespace Models
     /// </summary>
     public class TextClassificationModel : Module<Tensor, Tensor, Tensor>
     {
-        private TorchSharp.Modules.EmbeddingBag embedding;
-        private TorchSharp.Modules.Linear fc;
+        private TorchSharp.Modules.EmbeddingBag _embedding;
+        private TorchSharp.Modules.Linear _fc;
 
-        public TextClassificationModel(long vocab_size, long embed_dim, long num_class) : base("TextClassification")
+        public TextClassificationModel(long vocabSize, long embedDim, long numClass) : base("TextClassification")
         {
-            embedding = EmbeddingBag(vocab_size, embed_dim, sparse: false);
-            fc = Linear(embed_dim, num_class);
+            _embedding = EmbeddingBag(vocabSize, embedDim, sparse: false);
+            _fc = Linear(embedDim, numClass);
             InitWeights();
 
             RegisterComponents();
@@ -29,15 +29,15 @@ namespace Models
         {
             var initrange = 0.5;
 
-            init.uniform_(embedding.weight, -initrange, initrange);
-            init.uniform_(fc.weight, -initrange, initrange);
-            init.zeros_(fc.bias);
+            init.uniform_(_embedding.weight, -initrange, initrange);
+            init.uniform_(_fc.weight, -initrange, initrange);
+            init.zeros_(_fc.bias);
         }
 
         public override Tensor forward(Tensor input, Tensor offsets)
         {
-            var t = embedding.call(input, offsets);
-            return fc.forward(t);
+            var t = _embedding.call(input, offsets);
+            return _fc.forward(t);
         }
     }
 }

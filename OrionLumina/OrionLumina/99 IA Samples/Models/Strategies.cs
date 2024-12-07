@@ -4,7 +4,7 @@ namespace Models;
 
     public static class Strategies
     {
-        private static readonly Random _random = new();
+        private static readonly Random Random = new();
 
         /// <summary>
         /// Epsilon-greedy strategy to select an arm.
@@ -14,9 +14,9 @@ namespace Models;
         /// <returns>Index of the selected arm.</returns>
         public static int EpsilonGreedy(double[] averageRewards, double epsilon)
         {
-            return _random.NextDouble() < epsilon ?
+            return Random.NextDouble() < epsilon ?
                 // Exploration: Choose a random arm
-                _random.Next(averageRewards.Length) :
+                Random.Next(averageRewards.Length) :
                 // Exploitation: Choose the arm with the highest average reward
                 Array.IndexOf(averageRewards, averageRewards.Max());
         }

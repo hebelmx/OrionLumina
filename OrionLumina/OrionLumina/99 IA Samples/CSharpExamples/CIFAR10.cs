@@ -83,7 +83,7 @@ namespace CSharpExamples
                 case "vgg13":
                 case "vgg16":
                 case "vgg19":
-                    model = new VGG(modelName, _numClasses, device);
+                    model = new Vgg(modelName, _numClasses, device);
                     break;
                 case "resnet18":
                     model = ResNet.ResNet18(_numClasses, device);
