@@ -27,15 +27,15 @@ namespace CSharpExamples
     /// </summary>
     public class TextClassification
     {
-        private const long emsize = 200;
+        private const long Emsize = 200;
 
-        private const long batch_size = 128;
-        private const long eval_batch_size = 128;
+        private const long BatchSize = 128;
+        private const long EvalBatchSize = 128;
 
-        private const int epochs = 15;
+        private const int Epochs = 15;
 
         // This path assumes that you're running this on Windows.
-        private readonly static string _dataLocation = Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory), "..", "Downloads", "AG_NEWS");
+        private static readonly string DataLocation = Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory), "..", "Downloads", "AG_NEWS");
 
         internal static void Run(int epochs, int timeout, string logdir)
         {
@@ -54,7 +54,7 @@ namespace CSharpExamples
 
             Console.WriteLine($"\tPreparing training and test data...");
 
-            using var reader = TorchText.Data.AG_NEWSReader.AG_NEWS("train", (Device)device, _dataLocation);
+            using var reader = TorchText.Data.AG_NEWSReader.AG_NEWS("train", (Device)device, DataLocation);
             var dataloader = reader.Enumerate();
 
             var tokenizer = TorchText.Data.Utils.get_tokenizer("basic_english");
@@ -71,7 +71,7 @@ namespace CSharpExamples
             Console.WriteLine($"\tCreating the model...");
             Console.WriteLine();
 
-            var model = new TextClassificationModel(vocab.Count, emsize, 4).to((Device)device);
+            var model = new TextClassificationModel(vocab.Count, Emsize, 4).to((Device)device);
 
             var loss = CrossEntropyLoss();
             var lr = 5.0;
@@ -87,7 +87,7 @@ namespace CSharpExamples
                 var sw = new Stopwatch();
                 sw.Start();
 
-                train(epoch, reader.GetBatches(tokenizer, vocab, batch_size), model, loss, optimizer);
+                Train(epoch, reader.GetBatches(tokenizer, vocab, BatchSize), model, loss, optimizer);
 
                 sw.Stop();
 
@@ -99,13 +99,13 @@ namespace CSharpExamples
 
             totalTime.Stop();
 
-            using var test_reader = TorchText.Data.AG_NEWSReader.AG_NEWS("test", (Device)device, _dataLocation);
+            using var testReader = TorchText.Data.AG_NEWSReader.AG_NEWS("test", (Device)device, DataLocation);
             {
 
                 var sw = new Stopwatch();
                 sw.Start();
 
-                var accuracy = evaluate(test_reader.GetBatches(tokenizer, vocab, eval_batch_size), model, loss);
+                var accuracy = Evaluate(testReader.GetBatches(tokenizer, vocab, EvalBatchSize), model, loss);
 
                 sw.Stop();
 
@@ -114,63 +114,63 @@ namespace CSharpExamples
             }
         }
 
-        static void train(int epoch, IEnumerable<(Tensor, Tensor, Tensor)> train_data, TextClassificationModel model, Loss<Tensor, Tensor, Tensor> criterion, torch.optim.Optimizer optimizer)
+        static void Train(int epoch, IEnumerable<(Tensor, Tensor, Tensor)> trainData, TextClassificationModel model, Loss<Tensor, Tensor, Tensor> criterion, torch.optim.Optimizer optimizer)
         {
             model.train();
 
-            var total_acc = 0.0;
-            long total_count = 0;
-            long log_interval = 250;
+            var totalAcc = 0.0;
+            long totalCount = 0;
+            long logInterval = 250;
 
             var batch = 0;
 
-            var batch_count = train_data.Count();
+            var batchCount = trainData.Count();
 
             using var d = torch.NewDisposeScope();
-            foreach (var (labels, texts, offsets) in train_data)
+            foreach (var (labels, texts, offsets) in trainData)
             {
 
                 optimizer.zero_grad();
 
-                using (var predicted_labels = model.forward(texts, offsets))
+                using (var predictedLabels = model.forward(texts, offsets))
                 {
 
-                    var loss = criterion.forward(predicted_labels, labels);
+                    var loss = criterion.forward(predictedLabels, labels);
                     loss.backward();
                     torch.nn.utils.clip_grad_norm_(model.parameters(), 0.5);
                     optimizer.step();
 
-                    total_acc += (predicted_labels.argmax(1) == labels).sum().to(torch.CPU).item<long>();
-                    total_count += labels.size(0);
+                    totalAcc += (predictedLabels.argmax(1) == labels).sum().to(torch.CPU).item<long>();
+                    totalCount += labels.size(0);
                 }
 
-                if (batch % log_interval == 0 && batch > 0)
+                if (batch % logInterval == 0 && batch > 0)
                 {
-                    var accuracy = total_acc / total_count;
-                    Console.WriteLine($"epoch: {epoch} | batch: {batch} / {batch_count} | accuracy: {accuracy:0.00}");
+                    var accuracy = totalAcc / totalCount;
+                    Console.WriteLine($"epoch: {epoch} | batch: {batch} / {batchCount} | accuracy: {accuracy:0.00}");
                 }
                 batch += 1;
             }
         }
 
-        static double evaluate(IEnumerable<(Tensor, Tensor, Tensor)> test_data, TextClassificationModel model, Loss<Tensor, Tensor, Tensor> criterion)
+        static double Evaluate(IEnumerable<(Tensor, Tensor, Tensor)> testData, TextClassificationModel model, Loss<Tensor, Tensor, Tensor> criterion)
         {
             model.eval();
 
-            var total_acc = 0.0;
-            long total_count = 0;
+            var totalAcc = 0.0;
+            long totalCount = 0;
 
             using var d = torch.NewDisposeScope();
-            foreach (var (labels, texts, offsets) in test_data)
+            foreach (var (labels, texts, offsets) in testData)
             {
-                using var predicted_labels = model.forward(texts, offsets);
-                var loss = criterion.forward(predicted_labels, labels);
+                using var predictedLabels = model.forward(texts, offsets);
+                var loss = criterion.forward(predictedLabels, labels);
 
-                total_acc += (predicted_labels.argmax(1) == labels).sum().to(torch.CPU).item<long>();
-                total_count += labels.size(0);
+                totalAcc += (predictedLabels.argmax(1) == labels).sum().to(torch.CPU).item<long>();
+                totalCount += labels.size(0);
             }
 
-            return total_acc / total_count;
+            return totalAcc / totalCount;
         }
     }
 }

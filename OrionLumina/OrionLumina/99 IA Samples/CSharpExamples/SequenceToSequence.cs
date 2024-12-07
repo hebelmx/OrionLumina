@@ -27,16 +27,16 @@ namespace CSharpExamples
     public class SequenceToSequence
     {
         // This path assumes that you're running this on Windows.
-        private static readonly string _dataLocation = Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory), "..", "Downloads", "wikitext-2-v1");
+        private static readonly string DataLocation = Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory), "..", "Downloads", "wikitext-2-v1");
 
-        private const long emsize = 200;
-        private const long nhid = 200;
-        private const long nlayers = 2;
-        private const long nhead = 2;
-        private const double dropout = 0.2;
+        private const long Emsize = 200;
+        private const long Nhid = 200;
+        private const long Nlayers = 2;
+        private const long Nhead = 2;
+        private const double Dropout = 0.2;
 
-        private const int batch_size = 64;
-        private const int eval_batch_size = 32;
+        private const int BatchSize = 64;
+        private const int EvalBatchSize = 32;
 
         internal static void Run(int epochs, int timeout, string logdir)
 
@@ -56,22 +56,22 @@ namespace CSharpExamples
 
             Console.WriteLine($"\tPreparing training and test data...");
 
-            var vocab_iter = TorchText.Datasets.WikiText2("train", _dataLocation);
+            var vocabIter = TorchText.Datasets.WikiText2("train", DataLocation);
             var tokenizer = TorchText.Data.Utils.get_tokenizer("basic_english");
 
             var counter = new TorchText.Vocab.Counter<string>();
-            foreach (var item in vocab_iter)
+            foreach (var item in vocabIter)
             {
                 counter.update(tokenizer(item));
             }
 
             var vocab = new TorchText.Vocab.Vocab(counter);
 
-            var (train_iter, valid_iter, test_iter) = TorchText.Datasets.WikiText2(_dataLocation);
+            var (trainIter, validIter, testIter) = TorchText.Datasets.WikiText2(DataLocation);
 
-            var train_data = Batchify(ProcessInput(train_iter, tokenizer, vocab), batch_size).to((Device)device);
-            var valid_data = Batchify(ProcessInput(valid_iter, tokenizer, vocab), eval_batch_size).to((Device)device);
-            var test_data = Batchify(ProcessInput(test_iter, tokenizer, vocab), eval_batch_size).to((Device)device);
+            var trainData = Batchify(ProcessInput(trainIter, tokenizer, vocab), BatchSize).to((Device)device);
+            var validData = Batchify(ProcessInput(validIter, tokenizer, vocab), EvalBatchSize).to((Device)device);
+            var testData = Batchify(ProcessInput(testIter, tokenizer, vocab), EvalBatchSize).to((Device)device);
 
             var bptt = 32;
 
@@ -80,7 +80,7 @@ namespace CSharpExamples
             Console.WriteLine($"\tCreating the model...");
             Console.WriteLine();
 
-            var model = new TransformerModel(ntokens, emsize, nhead, nhid, nlayers, dropout).To((Device)device);
+            var model = new TransformerModel(ntokens, Emsize, Nhead, Nhid, Nlayers, Dropout).To((Device)device);
             var loss = CrossEntropyLoss();
             var lr = 2.50;
             var optimizer = torch.optim.SGD(model.parameters(), lr);
@@ -97,107 +97,107 @@ namespace CSharpExamples
                 var sw = new Stopwatch();
                 sw.Start();
 
-                train(epoch, train_data, model, loss, bptt, ntokens, optimizer);
+                Train(epoch, trainData, model, loss, bptt, ntokens, optimizer);
 
-                var val_loss = evaluate(valid_data, model, loss, bptt, ntokens, optimizer);
+                var valLoss = Evaluate(validData, model, loss, bptt, ntokens, optimizer);
                 sw.Stop();
 
-                Console.WriteLine($"\nEnd of epoch: {epoch} | lr: {optimizer.ParamGroups.First().LearningRate:0.00} | time: {sw.Elapsed.TotalSeconds:0.0}s | loss: {val_loss:0.00}\n");
+                Console.WriteLine($"\nEnd of epoch: {epoch} | lr: {optimizer.ParamGroups.First().LearningRate:0.00} | time: {sw.Elapsed.TotalSeconds:0.0}s | loss: {valLoss:0.00}\n");
                 scheduler.step();
 
                 if (writer != null)
                 {
-                    writer.add_scalar("seq2seq/loss", (float)val_loss, epoch);
+                    writer.add_scalar("seq2seq/loss", (float)valLoss, epoch);
                 }
 
                 if (totalTime.Elapsed.TotalSeconds > timeout) break;
             }
 
-            var tst_loss = evaluate(test_data, model, loss, bptt, ntokens, optimizer);
+            var tstLoss = Evaluate(testData, model, loss, bptt, ntokens, optimizer);
             totalTime.Stop();
 
-            Console.WriteLine($"\nEnd of training | time: {totalTime.Elapsed.TotalSeconds:0.0}s | loss: {tst_loss:0.00}\n");
+            Console.WriteLine($"\nEnd of training | time: {totalTime.Elapsed.TotalSeconds:0.0}s | loss: {tstLoss:0.00}\n");
         }
 
-        private static void train(int epoch, Tensor train_data, TransformerModel model, Loss<Tensor, Tensor, Tensor> criterion, int bptt, int ntokens, torch.optim.Optimizer optimizer)
+        private static void Train(int epoch, Tensor trainData, TransformerModel model, Loss<Tensor, Tensor, Tensor> criterion, int bptt, int ntokens, torch.optim.Optimizer optimizer)
         {
             model.train();
 
-            var total_loss = 0.0f;
+            var totalLoss = 0.0f;
 
             using var d = torch.NewDisposeScope();
             var batch = 0;
-            var log_interval = 200;
+            var logInterval = 200;
 
-            var src_mask = model.GenerateSquareSubsequentMask(bptt);
+            var srcMask = model.GenerateSquareSubsequentMask(bptt);
 
-            var tdlen = train_data.shape[0];
+            var tdlen = trainData.shape[0];
 
 
             for (var i = 0; i < tdlen - 1; batch++, i += bptt)
             {
 
-                var (data, targets) = GetBatch(train_data, i, bptt);
+                var (data, targets) = GetBatch(trainData, i, bptt);
                 optimizer.zero_grad();
 
                 if (data.shape[0] != bptt)
                 {
-                    src_mask = model.GenerateSquareSubsequentMask(data.shape[0]);
+                    srcMask = model.GenerateSquareSubsequentMask(data.shape[0]);
                 }
 
-                using (var output = model.forward(data, src_mask))
+                using (var output = model.forward(data, srcMask))
                 {
                     var loss = criterion.forward(output.view(-1, ntokens), targets);
                     loss.backward();
                     torch.nn.utils.clip_grad_norm_(model.parameters(), 0.5);
                     optimizer.step();
 
-                    total_loss += loss.to(torch.CPU).item<float>();
+                    totalLoss += loss.to(torch.CPU).item<float>();
                 }
 
-                if (batch % log_interval == 0 && batch > 0)
+                if (batch % logInterval == 0 && batch > 0)
                 {
-                    var cur_loss = total_loss / log_interval;
-                    Console.WriteLine($"epoch: {epoch} | batch: {batch} / {tdlen / bptt} | loss: {cur_loss:0.00}");
-                    total_loss = 0;
+                    var curLoss = totalLoss / logInterval;
+                    Console.WriteLine($"epoch: {epoch} | batch: {batch} / {tdlen / bptt} | loss: {curLoss:0.00}");
+                    totalLoss = 0;
                 }
 
-                d.DisposeEverythingBut(src_mask);
+                d.DisposeEverythingBut(srcMask);
             }
         }
 
-        private static double evaluate(Tensor eval_data, TransformerModel model, Loss<Tensor, Tensor, Tensor> criterion, int bptt, int ntokens, torch.optim.Optimizer optimizer)
+        private static double Evaluate(Tensor evalData, TransformerModel model, Loss<Tensor, Tensor, Tensor> criterion, int bptt, int ntokens, torch.optim.Optimizer optimizer)
         {
             model.eval();
 
             using var d = torch.NewDisposeScope();
-            var src_mask = model.GenerateSquareSubsequentMask(bptt);
+            var srcMask = model.GenerateSquareSubsequentMask(bptt);
 
-            var total_loss = 0.0f;
+            var totalLoss = 0.0f;
             var batch = 0;
 
 
-            for (var i = 0; i < eval_data.shape[0] - 1; batch++, i += bptt)
+            for (var i = 0; i < evalData.shape[0] - 1; batch++, i += bptt)
             {
 
-                var (data, targets) = GetBatch(eval_data, i, bptt);
+                var (data, targets) = GetBatch(evalData, i, bptt);
                 if (data.shape[0] != bptt)
                 {
-                    src_mask = model.GenerateSquareSubsequentMask(data.shape[0]);
+                    srcMask = model.GenerateSquareSubsequentMask(data.shape[0]);
                 }
-                using (var output = model.forward(data, src_mask))
+                using (var output = model.forward(data, srcMask))
                 {
                     var loss = criterion.forward(output.view(-1, ntokens), targets);
-                    total_loss += data.shape[0] * loss.to(torch.CPU).item<float>();
+                    totalLoss += data.shape[0] * loss.to(torch.CPU).item<float>();
                 }
 
                 data.Dispose();
                 targets.Dispose();
 
-                d.DisposeEverythingBut(src_mask);
+                d.DisposeEverythingBut(srcMask);
             }
 
-            return total_loss / eval_data.shape[0];
+            return totalLoss / evalData.shape[0];
         }
 
         static Tensor ProcessInput(IEnumerable<string> iter, Func<string, IEnumerable<string>> tokenizer, TorchText.Vocab.Vocab vocab)
@@ -217,10 +217,10 @@ namespace CSharpExamples
             return result;
         }
 
-        static Tensor Batchify(Tensor data, int batch_size)
+        static Tensor Batchify(Tensor data, int batchSize)
         {
-            var nbatch = data.shape[0] / batch_size;
-            using var d2 = data.narrow(0, 0, nbatch * batch_size).view(batch_size, -1).t();
+            var nbatch = data.shape[0] / batchSize;
+            using var d2 = data.narrow(0, 0, nbatch * batchSize).view(batchSize, -1).t();
             return d2.contiguous();
         }
 

@@ -28,7 +28,7 @@ namespace CSharpExamples
                 {
                     case "mnist":
                     case "fashion-mnist":
-                        MNIST.Run(epochs, timeout, logdir, argumentParser[idx].ToLower());
+                        Mnist.Run(epochs, timeout, logdir, argumentParser[idx].ToLower());
                         break;
 
                     case "fgsm":
@@ -51,7 +51,7 @@ namespace CSharpExamples
                     case "vgg13":
                     case "vgg16":
                     case "vgg19":
-                        CIFAR10.Run(epochs, timeout, logdir, argumentParser[idx]);
+                        Cifar10.Run(epochs, timeout, logdir, argumentParser[idx]);
                         break;
 
                     case "text":

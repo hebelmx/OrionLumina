@@ -31,13 +31,13 @@ namespace CSharpExamples
     /// In each case, there are four .gz files to download. Place them in a folder and then point the '_dataLocation'
     /// constant below at the folder location.
     /// </remarks>
-    public class MNIST
+    public class Mnist
     {
         private static int _epochs = 4;
         private static int _trainBatchSize = 64;
         private static int _testBatchSize = 128;
 
-        private readonly static int _logInterval = 100;
+        private static readonly int LogInterval = 100;
 
         internal static void Run(int epochs, int timeout, string logdir, string dataset)
         {
@@ -152,7 +152,7 @@ namespace CSharpExamples
 
                 optimizer.step();
 
-                if (batchId % _logInterval == 0)
+                if (batchId % LogInterval == 0)
                 {
                     Console.WriteLine($"\rTrain: epoch {epoch} [{batchId * batchSize} / {size}] Loss: {output.ToSingle():F4}");
                 }

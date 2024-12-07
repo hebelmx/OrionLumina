@@ -24,16 +24,16 @@ namespace CSharpExamples
     ///
     /// Note: so far, CIFAR10 is supported, but not CIFAR100.
     /// </remarks>
-    class CIFAR10
+    class Cifar10
     {
-        private readonly static string _dataset = "CIFAR10";
-        private readonly static string _dataLocation = Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory), "..", "Downloads", _dataset);
+        private static readonly string Dataset = "CIFAR10";
+        private static readonly string DataLocation = Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory), "..", "Downloads", Dataset);
 
         private static int _trainBatchSize = 64;
         private static int _testBatchSize = 128;
 
-        private readonly static int _logInterval = 25;
-        private readonly static int _numClasses = 10;
+        private static readonly int LogInterval = 25;
+        private static readonly int NumClasses = 10;
 
         internal static void Run(int epochs, int timeout, string logdir, string modelName)
         {
@@ -53,13 +53,13 @@ namespace CSharpExamples
             }
 
             Console.WriteLine();
-            Console.WriteLine($"\tRunning {modelName} with {_dataset} on {device.type.ToString()} for {epochs} epochs, terminating after {TimeSpan.FromSeconds(timeout)}.");
+            Console.WriteLine($"\tRunning {modelName} with {Dataset} on {device.type.ToString()} for {epochs} epochs, terminating after {TimeSpan.FromSeconds(timeout)}.");
             Console.WriteLine();
 
             var writer = String.IsNullOrEmpty(logdir) ? null : torch.utils.tensorboard.SummaryWriter(logdir, createRunName: true);
 
-            var sourceDir = _dataLocation;
-            var targetDir = Path.Combine(_dataLocation, "test_data");
+            var sourceDir = DataLocation;
+            var targetDir = Path.Combine(DataLocation, "test_data");
 
             if (!Directory.Exists(targetDir))
             {
@@ -74,37 +74,37 @@ namespace CSharpExamples
             switch (modelName.ToLower())
             {
                 case "alexnet":
-                    model = new AlexNet(modelName, _numClasses, device);
+                    model = new AlexNet(modelName, NumClasses, device);
                     break;
                 case "mobilenet":
-                    model = new MobileNet(modelName, _numClasses, device);
+                    model = new MobileNet(modelName, NumClasses, device);
                     break;
                 case "vgg11":
                 case "vgg13":
                 case "vgg16":
                 case "vgg19":
-                    model = new Vgg(modelName, _numClasses, device);
+                    model = new Vgg(modelName, NumClasses, device);
                     break;
                 case "resnet18":
-                    model = ResNet.ResNet18(_numClasses, device);
+                    model = ResNet.ResNet18(NumClasses, device);
                     break;
                 case "resnet34":
                     _testBatchSize /= 4;
-                    model = ResNet.ResNet34(_numClasses, device);
+                    model = ResNet.ResNet34(NumClasses, device);
                     break;
                 case "resnet50":
                     _trainBatchSize /= 6;
                     _testBatchSize /= 8;
-                    model = ResNet.ResNet50(_numClasses, device);
+                    model = ResNet.ResNet50(NumClasses, device);
                     break;
                 case "resnet101":
                     _trainBatchSize /= 6;
                     _testBatchSize /= 8;
-                    model = ResNet.ResNet101(_numClasses, device);
+                    model = ResNet.ResNet101(NumClasses, device);
                     break;
                 case "resnet152":
                     _testBatchSize /= 4;
-                    model = ResNet.ResNet152(_numClasses, device);
+                    model = ResNet.ResNet152(NumClasses, device);
                     break;
             }
 
@@ -121,28 +121,28 @@ namespace CSharpExamples
             using (var optimizer = torch.optim.Adam(model.parameters(), 0.001))
             {
 
-                var totalSW = new Stopwatch();
-                totalSW.Start();
+                var totalSw = new Stopwatch();
+                totalSw.Start();
 
                 for (var epoch = 1; epoch <= epochs; epoch++)
                 {
 
-                    var epchSW = new Stopwatch();
-                    epchSW.Start();
+                    var epchSw = new Stopwatch();
+                    epchSw.Start();
 
                     var loss = NLLLoss();
 
                     Train(model, optimizer, loss, train.Data(), epoch, _trainBatchSize, train.Size);
                     Test(model, loss, writer, modelName.ToLower(), test.Data(), epoch, test.Size);
 
-                    epchSW.Stop();
-                    Console.WriteLine($"Elapsed time for this epoch: {epchSW.Elapsed.TotalSeconds} s.");
+                    epchSw.Stop();
+                    Console.WriteLine($"Elapsed time for this epoch: {epchSw.Elapsed.TotalSeconds} s.");
 
-                    if (totalSW.Elapsed.TotalSeconds > timeout) break;
+                    if (totalSw.Elapsed.TotalSeconds > timeout) break;
                 }
 
-                totalSW.Stop();
-                Console.WriteLine($"Elapsed training time: {totalSW.Elapsed} s.");
+                totalSw.Stop();
+                Console.WriteLine($"Elapsed training time: {totalSw.Elapsed} s.");
             }
 
             model.Dispose();
@@ -182,7 +182,7 @@ namespace CSharpExamples
 
                 correct += prediction.argmax(1).eq(target).sum().ToInt64();
 
-                if (batchId % _logInterval == 0)
+                if (batchId % LogInterval == 0)
                 {
                     var count = Math.Min(batchId * batchSize, size);
                     Console.WriteLine($"\rTrain: epoch {epoch} [{count} / {size}] Loss: {output.ToSingle().ToString("0.000000")} | Accuracy: {((float)correct / total).ToString("0.000000")}");

@@ -42,13 +42,13 @@ namespace CSharpExamples
     /// </remarks>
     public class AdversarialExampleGeneration
     {
-        private readonly static string _dataLocation = Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory), "..", "Downloads", "mnist");
+        private static readonly string DataLocation = Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory), "..", "Downloads", "mnist");
 
         private static int _epochs = 4;
         private static int _trainBatchSize = 64;
         private static int _testBatchSize = 128;
 
-        static internal void Run(int epochs, int timeout, string logdir, string dataset)
+        internal static void Run(int epochs, int timeout, string logdir, string dataset)
         {
             _epochs = epochs;
 
@@ -78,8 +78,8 @@ namespace CSharpExamples
 
             Console.WriteLine($"\tPreparing training and test data...");
 
-            var sourceDir = _dataLocation;
-            var targetDir = Path.Combine(_dataLocation, "test_data");
+            var sourceDir = DataLocation;
+            var targetDir = Path.Combine(DataLocation, "test_data");
 
             var writer = String.IsNullOrEmpty(logdir) ? null : torch.utils.tensorboard.SummaryWriter(logdir, createRunName: true);
 
@@ -108,7 +108,7 @@ namespace CSharpExamples
 
                 using (var train = new MNISTReader(targetDir, "train", _trainBatchSize, device: device, shuffle: true, transform: normImage))
                 {
-                    MNIST.TrainingLoop(dataset, timeout, writer, (Device)device, model, train, test);
+                    Mnist.TrainingLoop(dataset, timeout, writer, (Device)device, model, train, test);
                 }
 
                 Console.WriteLine("Moving on to the Adversarial model.\n");
@@ -132,9 +132,9 @@ namespace CSharpExamples
             }
         }
 
-        private static Tensor Attack(Tensor image, double ε, Tensor data_grad)
+        private static Tensor Attack(Tensor image, double ε, Tensor dataGrad)
         {
-            using var sign = data_grad.sign();
+            using var sign = dataGrad.sign();
             var perturbed = (image + ε * sign).clamp(0.0, 1.0);
             return perturbed;
         }
