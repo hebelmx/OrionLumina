@@ -10,13 +10,13 @@ namespace TestModels.Tests
         public void Pole_ShouldRemainStable_WhenTorqueBalancesGravity()
         {
             // Arrange
-            double length = 1.0;
-            double mass = 0.1;
-            double angleThreshold = 0.5;
+            var length = 1.0;
+            var mass = 0.1;
+            var angleThreshold = 0.5;
             var pole = new Pole(length, mass, angleThreshold);
 
             // Act
-            double torque = 0.0; // No external force
+            var torque = 0.0; // No external force
             pole.Update(torque, 0.1); // Small time step
 
             // Assert
@@ -29,13 +29,13 @@ namespace TestModels.Tests
         public void Pole_ShouldTransitionToUnstable_WhenTorqueIncreasesAngleBeyondThreshold()
         {
             // Arrange
-            double length = 1.0;
-            double mass = 0.1;
-            double angleThreshold = 0.5;
+            var length = 1.0;
+            var mass = 0.1;
+            var angleThreshold = 0.5;
             var pole = new Pole(length, mass, angleThreshold);
 
             // Act
-            double torque = 10.0; // High torque
+            var torque = 10.0; // High torque
             pole.Update(torque, 0.1); // Small time step
 
             // Assert

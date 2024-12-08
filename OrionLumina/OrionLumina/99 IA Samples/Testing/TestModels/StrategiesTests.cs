@@ -20,7 +20,7 @@ public class StrategiesTests(ITestOutputHelper testOutputHelper)
         // Counters for each arm
         var armCounts = new int[3]; // Array to hold counts for arms 0, 1, and 2
 
-        for (int i = 0; i < trials; i++)
+        for (var i = 0; i < trials; i++)
         {
             var selectedArm = Strategies.EpsilonGreedy(averageRewards, epsilon);
 
@@ -80,7 +80,7 @@ public class StrategiesTests(ITestOutputHelper testOutputHelper)
         var countArms = 0;
         var trials = 1000;
         // Act
-        for (int i = 0; i < trials; i++)
+        for (var i = 0; i < trials; i++)
         {
             var selectedArm = Strategies.EpsilonGreedy(averageRewards, epsilon);
             _ = selectedArm switch
@@ -103,4 +103,3 @@ public class StrategiesTests(ITestOutputHelper testOutputHelper)
     }
 }
 
-    

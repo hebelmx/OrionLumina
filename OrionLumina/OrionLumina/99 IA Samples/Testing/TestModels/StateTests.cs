@@ -11,8 +11,8 @@ namespace TestModels.Tests
         {
             // Arrange
             var stableState = new StableState();
-            double angle = 0.1; // Within threshold
-            double angleThreshold = 0.5;
+            var angle = 0.1; // Within threshold
+            var angleThreshold = 0.5;
 
             // Act
             var newState = stableState.Transition(angle, angleThreshold);
@@ -26,8 +26,8 @@ namespace TestModels.Tests
         {
             // Arrange
             var stableState = new StableState();
-            double angle = 0.6; // Exceeds threshold
-            double angleThreshold = 0.5;
+            var angle = 0.6; // Exceeds threshold
+            var angleThreshold = 0.5;
 
             // Act
             var newState = stableState.Transition(angle, angleThreshold);
@@ -41,8 +41,8 @@ namespace TestModels.Tests
         {
             // Arrange
             var unstableState = new UnstableState();
-            double angle = 1.1; // Exceeds double threshold
-            double angleThreshold = 0.5;
+            var angle = 1.1; // Exceeds double threshold
+            var angleThreshold = 0.5;
 
             // Act
             var newState = unstableState.Transition(angle, angleThreshold);

@@ -8,5 +8,5 @@ public interface IAction
     /// <summary>
     /// Gets the action's identifier.
     /// </summary>
-    int ActionId { get; }
+    string Name { get; }
 }

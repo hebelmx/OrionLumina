@@ -8,5 +8,7 @@ public interface IState
     /// <summary>
     /// Retrieves the features or observations of the state.
     /// </summary>
-    double[] Features { get; }
+
+    public int X { get;  set; }
+    public int Y { get;  set; }
 }

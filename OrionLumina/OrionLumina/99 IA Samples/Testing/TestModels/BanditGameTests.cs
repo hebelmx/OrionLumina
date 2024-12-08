@@ -26,7 +26,7 @@ namespace TestModels
             var game = new BanditGame([1.0]); // Always rewards
 
             // Act
-            int reward = game.PullArm(0);
+            var reward = game.PullArm(0);
 
             // Assert
             game.PullCounts[0].Should().Be(1);
@@ -48,7 +48,7 @@ namespace TestModels
             }
             
             // Act
-            double[] averages = game.GetAverageRewards();
+            var averages = game.GetAverageRewards();
 
             // Assert
             averages[0].Should().Be(1.0); // Arm 0 average is 1

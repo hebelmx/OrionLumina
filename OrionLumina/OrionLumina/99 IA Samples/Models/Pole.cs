@@ -1,7 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 
-namespace BalancingSimulation
-{
+namespace BalancingSimulation;
+
     public class Pole(double length, double mass, double angleThreshold)
     {
         public double Angle { get; private set; }
@@ -20,4 +21,3 @@ namespace BalancingSimulation
             CurrentState = CurrentState.Transition(Angle, angleThreshold);
         }
     }
-}

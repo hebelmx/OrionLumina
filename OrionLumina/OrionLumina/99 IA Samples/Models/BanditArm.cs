@@ -18,7 +18,7 @@ namespace Models
             /// <param name="successProbability">The probability of reward (0.0 to 1.0).</param>
             public BanditArm(double successProbability)
             {
-                if (successProbability < 0.0 || successProbability > 1.0)
+                if (successProbability is < 0.0 or > 1.0)
                     throw new ArgumentOutOfRangeException(nameof(successProbability), "Probability must be between 0.0 and 1.0.");
 
                 SuccessProbability = successProbability;
