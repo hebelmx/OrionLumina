@@ -8,6 +8,7 @@ public class MonteCarloControl
 {
     private readonly Random _random = new();
     private readonly double _gamma; // Discount factor
+    private readonly int _maxSteps;
 
     public MonteCarloControl(double gamma)
     {
@@ -15,12 +16,13 @@ public class MonteCarloControl
             throw new ArgumentException("Gamma must be in the range (0, 1].");
 
         _gamma = gamma;
+        _maxSteps = 10000; 
     }
 
     public (Dictionary<string, Dictionary<string, double>> Q, Dictionary<string, string> Policy) Control(
         List<string> states,
         List<string> actions,
-        Func<string, string, (string nextState, double reward)> transitionDynamics,
+        Func<string,int, string, (string nextState,int step, double reward)> transitionDynamics,
         int maxEpisodes)
     {
         // Initialize Q(s, a) arbitrarily and policy π(s) arbitrarily
@@ -87,7 +89,7 @@ public class MonteCarloControl
         List<string> states,
         List<string> actions,
         Dictionary<string, string> policy,
-        Func<string, string, (string nextState, double reward)> transitionDynamics)
+        Func<string, int, string, (string nextState, int step, double reward)> transitionDynamics)
     {
         var episode = new List<(string state, string action, double reward)>();
 
@@ -95,18 +97,24 @@ public class MonteCarloControl
         var state = states[_random.Next(states.Count)];
         var action = actions[_random.Next(actions.Count)];
 
+        var step = 0;
+        
         while (true)
         {
-            var (nextState, reward) = transitionDynamics(state, action);
+            var (nextState,nextStep, reward) = transitionDynamics(state,step, action);
+           
             episode.Add((state, action, reward));
+            
+            step = nextStep;
+            state = nextState;
+            action = policy[state];
 
             if (nextState == state) // Terminal state
                 break;
             if (reward > 0)
                 break;
-
-            state = nextState;
-            action = policy[state];
+            if (nextStep > _maxSteps)
+                break;
         }
 
         return episode;

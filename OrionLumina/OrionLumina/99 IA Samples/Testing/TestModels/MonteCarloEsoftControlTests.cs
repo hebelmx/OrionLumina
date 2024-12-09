@@ -3,6 +3,7 @@ using Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.VisualBasic.CompilerServices;
 using TorchSharp;
 using Xunit;
 using Xunit.Abstractions;
@@ -10,9 +11,14 @@ using Xunit.Sdk;
 
 namespace TestModels;
 
-public class MonteCarloControlTests(ITestOutputHelper testOutputHelper)
+public class MonteCarloESoftControlTests(ITestOutputHelper testOutputHelper)
 {
-    const string FinalState = "3";
+    const string FinalState = "0";
+    const double  Gamma = 0.9;
+    const double Epsilon = 0.05;
+    const int MaxSteps = 40_000;
+    private const int MaxEpisodes = 40_000;
+
     [Fact]
     public void MonteCarloControl_ShouldConvergeToOptimalPolicy()
     {
@@ -26,7 +32,7 @@ public class MonteCarloControlTests(ITestOutputHelper testOutputHelper)
         };
        
 
-        static (string nextState, int step, double reward) TransitionDynamics(string state, int step, string action)
+        static (string nextState, int step, double reward) TransitionDynamics(string state, int step, string finalState, string action)
         {
             var nextState = action switch
             {
@@ -61,32 +67,53 @@ public class MonteCarloControlTests(ITestOutputHelper testOutputHelper)
 
             var reward = nextState is FinalState ? 10 : -1;
 
+            if (nextState==state && state!=FinalState )
+            {
+                reward -= 10;
+            }
+
             if (action == "stay" &&  nextState is FinalState)
             {
-                reward+=10;
+                reward +=10;
             }
             else
             {
-                reward-=1;
+                reward -=10;
             }
 
             if (action == "stay" && nextState is not FinalState)
             {
                 reward -= 10;
             }
-            
+
+            var advance = Advance(state, nextState, FinalState);
+            reward += (advance*3);
             return (nextState, step, reward);
         }
 
-        
+
+        static int Advance(string state, string newState, string finalState)
+        {
+            var intState = int.Parse(state);
+            var intNewState = int.Parse(newState);
+            var intFinalState = int.Parse(finalState);
+
+            var oldDistance = Math.Abs(intFinalState - intState);
+            var newDistance = Math.Abs(intFinalState - intNewState);
+            var advance = newDistance- oldDistance;
+            return advance;
+        }
+
+
 
         var actions = new List<string> { "up", "down", "left", "right", "stay" };
 
-        var monteCarlo = new MonteCarloControl(gamma: 0.9);
+
+        var monteCarlo = new MonteCarloESoftControl(Gamma, Epsilon, MaxSteps);
 
         // Act
-        var (Q, policy) = monteCarlo.Control(states, actions, 
-                                                                        TransitionDynamics, maxEpisodes: 200000);
+        var (Q, policy) = monteCarlo.Control(states, FinalState ,actions, 
+                                                                        TransitionDynamics, maxEpisodes: MaxEpisodes);
 
         // Assert: Check if the policy converges to the optimal actions
         for (var row = 0; row < 4; row++)
