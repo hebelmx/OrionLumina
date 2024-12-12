@@ -1,32 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
+﻿using System.Collections.Generic;
 using System.Linq;
-using Xunit;
 using FluentAssertions;
 using Models;
+using Xunit;
 using Xunit.Abstractions;
-using Xunit.Sdk;
 
-public class GridWorldPolicyEvaluationTests
+namespace TestModels;
+
+public class GridWorldPolicyEvaluationTests(ITestOutputHelper testOutputHelper)
 {
-    private readonly ITestOutputHelper _testOutputHelper;
-
-    public GridWorldPolicyEvaluationTests(ITestOutputHelper testOutputHelper)
-    {
-        _testOutputHelper = testOutputHelper;
-    }
-
     [Fact]
     public void PolicyEvaluation_ShouldConvergeToCorrectValues()
     {
         // Arrange
         var states = new List<string>
         {
-                 "0", "1",   "2",   "3", 
-                 "4", "5",   "6",   "7", 
-                 "8", "9",   "10",  "11",
-                 "12", "13", "14" , "15" 
+            "0", "1",   "2",   "3", 
+            "4", "5",   "6",   "7", 
+            "8", "9",   "10",  "11",
+            "12", "13", "14" , "15" 
         };
 
         var actions = new List<string> { "up", "down", "left", "right" };
@@ -88,7 +80,7 @@ public class GridWorldPolicyEvaluationTests
 
         //for (int i = 0; i < 100; i++)
         //{
-            var values = evaluator.EvaluatePolicy(states, actions, policy, TransitionDynamics);
+        var values = evaluator.EvaluatePolicy(states, actions, policy, TransitionDynamics);
 
         //    foreach (var (key ,value) in values)
         //    {
@@ -125,7 +117,7 @@ public class GridWorldPolicyEvaluationTests
             var rowOutput = string.Join("\t", formattedRowValues);
 
             // Output the formatted row
-            _testOutputHelper.WriteLine(rowOutput);
+            testOutputHelper.WriteLine(rowOutput);
         }
         // Assert
         values.Values.Zip(expectedValues, (actual, expected) => new { actual, expected })

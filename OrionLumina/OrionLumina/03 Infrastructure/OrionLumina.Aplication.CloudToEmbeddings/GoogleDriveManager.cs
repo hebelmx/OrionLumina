@@ -51,7 +51,7 @@ public class GoogleDriveManager(ILogger<Worker> GoogleDriveDownloadFile, Credent
             Console.WriteLine("Folders found:");
             foreach (var file in result.Files)
             {
-                Console.WriteLine($"- {file.Name} (ID: {file.Id})");
+                Console.WriteLine($"- {file.Name} {file.MimeType}  (ID: {file.Id})");
             }
         }
         else

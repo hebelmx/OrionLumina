@@ -7,6 +7,8 @@
   <ItemGroup>
     <PackageReference Include="TorchSharp-cpu" Version="0.103.1" />
     <PackageReference Include="TorchVision" Version="0.103.1" />
+    <PackageReference Include="xunit" Version="2.9.2" />
+    
   </ItemGroup>
 
 </Project>

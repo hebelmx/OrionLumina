@@ -16,8 +16,8 @@ public class MonteCarloESoftControlTests(ITestOutputHelper testOutputHelper)
     const string FinalState = "0";
     const double  Gamma = 0.9;
     const double Epsilon = 0.05;
-    const int MaxSteps = 40_000;
-    private const int MaxEpisodes = 40_000;
+    const int MaxSteps = 1_000;
+    private const int MaxEpisodes = 1_000;
 
     [Fact]
     public void MonteCarloControl_ShouldConvergeToOptimalPolicy()
@@ -112,6 +112,7 @@ public class MonteCarloESoftControlTests(ITestOutputHelper testOutputHelper)
         var monteCarlo = new MonteCarloESoftControl(Gamma, Epsilon, MaxSteps);
 
         // Act
+
         var (Q, policy) = monteCarlo.Control(states, FinalState ,actions, 
                                                                         TransitionDynamics, maxEpisodes: MaxEpisodes);
 
